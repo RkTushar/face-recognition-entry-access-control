@@ -2,35 +2,158 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Museum Face Access System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f0f2f5, #e1e6ea); /* Light, subtle gradient */
+            color: #333; /* Dark text for contrast */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.85); /* Light, slightly transparent container */
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 90%;
+            max-width: 800px;
+        }
+        .dashboard-header {
+            color: #007bff; /* Primary accent color */
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .dashboard-header i {
+            margin-right: 15px;
+            font-size: 2.8rem;
+            vertical-align: middle;
+            animation: subtle-pulse 2s infinite alternate;
+        }
+        @keyframes subtle-pulse {
+            0% { transform: scale(1); opacity: 0.9; }
+            100% { transform: scale(1.03); opacity: 1; }
+        }
+        .info-card-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            justify-content: center;
+        }
+        .info-card {
+            background-color: rgba(255, 255, 255, 0.9); /* Light info card background */
+            border-radius: 10px;
+            padding: 30px;
+            width: calc(50% - 10px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+        .info-card h3 {
+            color: #6c757d; /* Secondary text color */
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .info-card h1 {
+            color: #28a745; /* Success color for emphasis */
+            font-size: 3rem;
+            font-weight: 800;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .action-button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .action-button {
+            background-color: #fff;
+            color: #007bff; /* Primary accent color */
+            border: 1px solid #007bff;
+            border-radius: 10px;
+            padding: 18px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease-in-out, border-color 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .action-button i {
+            margin-right: 15px;
+            font-size: 1.4rem;
+        }
+        .action-button:hover {
+            background-color: #007bff;
+            color: #fff;
+            transform: scale(1.03);
+            border-color: #0056b3;
+        }
+        .btn-primary { color: #fff; background-color: #007bff; border-color: #007bff; }
+        .btn-primary:hover { background-color: #0056b3; border-color: #0056b3; }
+        .btn-success { color: #fff; background-color: #28a745; border-color: #28a745; }
+        .btn-success:hover { background-color: #1e7e34; border-color: #1e7e34; }
+        .btn-warning { color: #212529; background-color: #ffc107; border-color: #ffc107; }
+        .btn-warning:hover { background-color: #e0a800; border-color: #e0a800; }
+        .btn-info { color: #fff; background-color: #17a2b8; border-color: #17a2b8; }
+        .btn-info:hover { background-color: #117a8b; border-color: #117a8b; }
+        .btn-danger { color: #fff; background-color: #dc3545; border-color: #dc3545; }
+        .btn-danger:hover { background-color: #c82333; border-color: #c82333; }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 
-<div class="container py-5">
-    <h1 class="mb-4 fw-bold text-center">🎟️ Museum Face Access System</h1>
+<div class="container">
+    <h1 class="mb-5 fw-bold text-center dashboard-header">
+        <i class="fas fa-fingerprint"></i> Museum Face Access
+    </h1>
 
-    <div class="row text-center mb-5">
-        <div class="col-md-6">
-            <div class="card shadow p-4">
-                <h3>Total Visitors</h3>
-                <h1>{{ total_visitors }}</h1>
-            </div>
+    <div class="info-card-row">
+        <div class="card shadow info-card">
+            <h3><i class="fas fa-walking"></i> Total Visitors</h3>
+            <h1>{{ total_visitors }}</h1>
         </div>
-        <div class="col-md-6">
-            <div class="card shadow p-4">
-                <h3>Total Faces Stored</h3>
-                <h1>{{ total_faces }}</h1>
-            </div>
+        <div class="card shadow info-card">
+            <h3><i class="fas fa-brain"></i> Total Faces Stored</h3>
+            <h1>{{ total_faces }}</h1>
         </div>
     </div>
 
-    <div class="d-grid gap-3 col-6 mx-auto">
-        <a href="/register" class="btn btn-primary btn-lg">Register Visitor</a>
-        <a href="/entry" class="btn btn-success btn-lg">Entry Check</a>
-        <a href="/logs" class="btn btn-warning btn-lg">View Access Logs</a>
-        <a href="/visitors" class="btn btn-info btn-lg">Manage Visitors</a>
-        <a href="/logout" class="btn btn-danger btn-lg">Logout</a>
+    <div class="action-button-grid">
+        <a href="/register" class="action-button btn-primary">
+            <i class="fas fa-user-plus"></i> Register
+        </a>
+        <a href="/entry" class="action-button btn-success">
+            <i class="fas fa-door-open"></i> Entry Check
+        </a>
+        <a href="/logs" class="action-button btn-warning">
+            <i class="fas fa-list-alt"></i> Access Logs
+        </a>
+        <a href="/visitors" class="action-button btn-info">
+            <i class="fas fa-users-cog"></i> Manage Visitors
+        </a>
+        <a href="/logout" class="action-button btn-danger">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
     </div>
 </div>
 
