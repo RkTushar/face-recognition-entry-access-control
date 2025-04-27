@@ -49,7 +49,19 @@ def log_access(name, status):
 def home():
     if not session.get('admin_logged_in'):
         return redirect(url_for('login'))
-    return render_template('home.html')
+
+    conn = sqlite3.connect(DATABASE)
+    c = conn.cursor()
+
+    c.execute('SELECT COUNT(DISTINCT name) FROM visitors')
+    total_visitors = c.fetchone()[0]
+
+    c.execute('SELECT COUNT(*) FROM visitors')
+    total_faces = c.fetchone()[0]
+
+    conn.close()
+
+    return render_template('home.html', total_visitors=total_visitors, total_faces=total_faces)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -194,7 +206,6 @@ def visitors():
     visitors = c.fetchall()
     conn.close()
 
-    # Remove duplicates (show each visitor name only once)
     unique_visitors = {}
     for visitor in visitors:
         visitor_id, name, visit_date = visitor
@@ -281,6 +292,19 @@ def add_photo(visitor_id):
 
     return render_template('add_photo.html', visitor_id=visitor_id, name=name)
 
+@app.route('/delete/<int:visitor_id>', methods=['POST'])
+def delete_visitor(visitor_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('login'))
+
+    conn = sqlite3.connect(DATABASE)
+    c = conn.cursor()
+    c.execute('DELETE FROM visitors WHERE id = ?', (visitor_id,))
+    conn.commit()
+    conn.close()
+
+    flash('✅ Visitor deleted successfully!')
+    return redirect(url_for('visitors'))
 
 if __name__ == "__main__":
     app.run(debug=True)
